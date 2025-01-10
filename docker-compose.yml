@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: limeapi
+    container_name: limeapi
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    env_file:
+      - .env
+    environment:
+      - API_PORT=${API_PORT}
+      - DB_CONNECTION_URL=${DB_CONNECTION_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - ETH_NODE_URL=${ETH_NODE_URL}
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  db:
+    image: postgres:latest
+    container_name: limeapi_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+
+volumes:
+  db-data:
+
+networks:
+  app_network:
+    driver: bridge
+
+# docker-compose build
+# docker-compose up -d

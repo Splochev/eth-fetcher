@@ -19,5 +19,5 @@ EXPOSE 3020
 # Run the application
 CMD ["npm", "start"]
 
-# docker build -t limeapi .
-# docker run -p 3020:3020 limeapi
+# docker build -t eth_fetcher_api .
+# docker run -p 3020:3020 eth_fetcher_api

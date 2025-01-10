@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: limeapi
-    container_name: limeapi
+    image: eth_fetcher
+    container_name: eth_fetcher
     ports:
       - "${API_PORT}:${API_PORT}"
     env_file:
@@ -23,7 +23,7 @@ services:
 
   db:
     image: postgres:latest
-    container_name: limeapi_db
+    container_name: eth_fetcher_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

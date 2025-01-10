@@ -1,11 +1,11 @@
 import express from "express";
-import LimeController from "./controllers/LimeController";
+import APIController from "./controllers/APIController";
 
 export default class MainRouter {
     static build() {
         const router = express.Router();
-        const limeController = new LimeController();
-        router.use('', limeController.router);
+        const apiController = new APIController();
+        router.use('', apiController.router);
         return router;
     }
 }

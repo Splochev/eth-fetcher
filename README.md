@@ -1,14 +1,14 @@
-# LimeAPI Documentation
+# Eth Fetcher Documentation
 
 ## Introduction
 
-LimeAPI is a TypeScript-based backend application designed to fetch transaction details from the Ethereum blockchain. The system interacts with Ethereum nodes to gather real-time data, providing users with transaction information and storing it for retrieval.
+Eth Fetcher is a TypeScript-based backend application designed to fetch transaction details from the Ethereum blockchain. The system interacts with Ethereum nodes to gather real-time data, providing users with transaction information and storing it for retrieval.
 
 ---
 
 ## 1. **Architecture of the Server - Design Decisions and Overview**
 
-LimeAPI follows a modular and layered architecture to ensure separation of concerns, scalability, and maintainability.
+Eth Fetcher follows a modular and layered architecture to ensure separation of concerns, scalability, and maintainability.
 
 ### **1.1 Layers and Components**
 - **Controllers**: Handle HTTP requests and responses, interact with services, and return results to clients.
@@ -43,8 +43,8 @@ LimeAPI follows a modular and layered architecture to ensure separation of conce
 ### **2.2 Setup Instructions**
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/your-repository/limeapi.git
-cd limeapi
+git clone https://github.com/your-repository/eth_fetcher.git
+cd eth_fetcher
 ```
 
 2. **Install Dependencies**
@@ -76,16 +76,16 @@ docker-compose up -d
 ```
 - Without Database:
 ```bash
-docker build -t limeapi .
-docker run -p 3020:3020 limeapi
+docker build -t eth_fetcher
+docker run -p 3020:3020 eth_fetcher
 ```
 ---
 
 ## 3. ** Requests and Responses (with Examples)**
-### **3.1 POST /lime/authenticate - Authenticate User and Get JWT Token**
+### **3.1 POST /api/authenticate - Authenticate User and Get JWT Token**
 - Request:
 ```http
-POST /lime/authenticate
+POST /api/authenticate
 Content-Type: application/json
 {
   "username": "dave",
@@ -96,45 +96,19 @@ Content-Type: application/json
 ```json
 { "token": "eyJhbGciOiJIUz...I1NiI" }
 ```
-### **3.2 GET /lime/eth/:rlphex? - Retrieve Ethereum Transaction Details. Links them to user if given**
+### **3.2 GET /api/eth/:rlphex? - Retrieve Ethereum Transaction Details. Links them to user if given**
 - Request (Ethereum Transaction Hash): 
 ```http
-GET /lime/eth/f90110b842307866633262336236646233386135316462336239636239356
+GET /api/eth/f90110b842307866633262336236646233386135316462336239636239356
 Content-Type: application/json
 AUTH_TOKEN: eyJhbGciOiJIUzI1NiI
 ```
 ```http
-GET /lime/eth/f90110b842307866633262336236646233386135316462336239636239356
+GET /api/eth/f90110b842307866633262336236646233386135316462336239636239356
 Content-Type: application/json
 ```
 ```http
-GET /lime/eth?transactionHashes=0xfc2b3b6d....6e4b4b99df056ffb7f2e&transactionHashes=0x48603f7adff7....7c8821df79356
-Content-Type: application/json
-```
-- Response:
-```json
-{
-    "transactions": [
-        {
-            "transactionHash": "0xfc2b3b6db38a51db3b9cb95de29b719de8deb99630626e4b4b99df056ffb7f2e",
-            "transactionStatus": 1,
-            "blockHash": "0x123456789",
-            "blockNumber": 100,
-            "from": "0xAddressFrom",
-            "to": "0xAddressTo",
-            "contractAddress": null,
-            "logsCount": 2,
-            "input": "0xdata",
-            "value": "1000000000000000000"
-        },
-        ...
-    ]
-}
-```
-### **3.3 GET /lime/all - Retrieve All Transactions in Database**
-- Request:
-```http
-GET /lime/all
+GET /api/eth?transactionHashes=0xfc2b3b6d....6e4b4b99df056ffb7f2e&transactionHashes=0x48603f7adff7....7c8821df79356
 Content-Type: application/json
 ```
 - Response:
@@ -157,10 +131,36 @@ Content-Type: application/json
     ]
 }
 ```
-### **3.3 GET /lime/my - Retrieve Transactions Linked to Logged-in User
+### **3.3 GET /api/all - Retrieve All Transactions in Database**
 - Request:
 ```http
-GET /lime/my
+GET /api/all
+Content-Type: application/json
+```
+- Response:
+```json
+{
+    "transactions": [
+        {
+            "transactionHash": "0xfc2b3b6db38a51db3b9cb95de29b719de8deb99630626e4b4b99df056ffb7f2e",
+            "transactionStatus": 1,
+            "blockHash": "0x123456789",
+            "blockNumber": 100,
+            "from": "0xAddressFrom",
+            "to": "0xAddressTo",
+            "contractAddress": null,
+            "logsCount": 2,
+            "input": "0xdata",
+            "value": "1000000000000000000"
+        },
+        ...
+    ]
+}
+```
+### **3.3 GET /api/my - Retrieve Transactions Linked to Logged-in User
+- Request:
+```http
+GET /api/my
 Content-Type: application/json
 AUTH_TOKEN: eyJhbGciOiJIUzI1NiI
 ```
@@ -191,7 +191,7 @@ AUTH_TOKEN: eyJhbGciOiJIUzI1NiI
 
 ### **4.1 Suggested API Improvements**
 - **Batch Processing**: Implement batch processing for fetching multiple transactions at once to reduce API call overhead.
-- **Pagination for /lime/all and /lime/my**: Allow pagination to handle large datasets and prevent performance degradation.
+- **Pagination for /api/all and /api/my**: Allow pagination to handle large datasets and prevent performance degradation.
 
 ### **4.2 Trade-offs**
 - **Rate Limiting**: To prevent abuse and ensure the service is available to all users, implement rate limiting. However, this can impact users with high transaction volumes.
@@ -241,12 +241,3 @@ AUTH_TOKEN: eyJhbGciOiJIUzI1NiI
 
 ### **8.2 Fallback Ethereum Node**
 - Use **multiple Ethereum node providers** (e.g., Alchemy, Infura) and implement a fallback mechanism in case one fails. This ensures availability even when one provider is down.
-
----
-
-## 9. **Examples with real data**
-![lime/all](assets/lime-all.png)
-![lime/authenticate](assets/lime-authenticate.png)
-![lime/eth/rlphex](assets/lime-eth-rlphex.png)
-![lime/eth?transactionHashes=.png](assets/lime-eth-transactionHashes.png)
-![lime/my](assets/lime-my.png)

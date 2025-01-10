@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     });
     next();
 });
-app.use('/lime', MainRouter.build());
+app.use('/api', MainRouter.build());
 // Global error handler
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(error);

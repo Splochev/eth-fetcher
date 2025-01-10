@@ -5,7 +5,7 @@ import AuthHelpers from "../utils/authHelpers";
 import loggedIn from "../middleware/loggedIn";
 import globalTry from "../middleware/globalTry";
 
-export default class LimeController {
+export default class APIController {
     router: Router;
 
     constructor() {
